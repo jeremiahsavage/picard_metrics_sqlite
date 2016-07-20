@@ -1,0 +1,35 @@
+FROM ubuntu:16.04
+
+MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
+
+ENV picard_metrics_sqlite 0.1
+
+USER root
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get upgrade -y --force-yes
+
+RUN apt-get update && apt-get install -y --force-yes \
+    python-pip \
+    python-virtualenv \
+    python3-dev \
+    sudo \
+    virtualenvwrapper
+
+RUN apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN adduser --disabled-password --gecos '' ubuntu && adduser ubuntu sudo && echo "ubuntu	ALL=(ALL)	NOPASSWD:ALL" >> /etc/sudoers.d/ubuntu
+
+USER ubuntu
+
+ENV HOME /home/ubuntu
+
+WORKDIR ${HOME}
+
+RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
+
+RUN /bin/bash -c "source ${HOME}/.virtualenvs/p3/bin/activate \
+    && pip install picard_metrics_sqlite
