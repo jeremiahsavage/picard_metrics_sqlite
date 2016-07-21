@@ -1,13 +1,11 @@
-import sys
-
 import pandas as pd
 
-
-def picard_markduplicates_to_dict(uuid, bam, metrics_path, logger):
+def get_data_dict(stats_path, logger):
     data_dict = dict()
     read_header = False
-    with open(metrics_path, 'r') as metrics_open:
-        for line in metrics_open:
+    
+    with open(stats_path, 'r') as f_open:
+        for line in f_open:
             if line.startswith("## HISTOGRAM"):
                 break
             if line.startswith('#') or len(line) < 5:
@@ -23,22 +21,14 @@ def picard_markduplicates_to_dict(uuid, bam, metrics_path, logger):
                 logger.info('len(data_list)=%s' % len(data_list))
                 for value_pos, value_key in enumerate(value_key_list):
                     data_dict[value_key] = data_list[value_pos]
-    logger.info('picard_markduplicates data_dict=%s' % data_dict)
     return data_dict
 
-
-    ## save stats to db
-    if pipe_util.already_step(step_dir, 'picard_markduplicates_db', logger):
-        logger.info('already stored `picard markduplicates` of %s to db' % bam_name)
-    else:
-        data_dict = picard_markduplicates_to_dict(uuid, bam_name, metrics_file, logger)
-        data_dict['uuid'] = [uuid]
-        data_dict['bam_name'] = bam_name
-        data_dict['input_state'] = input_state
-        df = pd.DataFrame(data_dict)
-        table_name = 'picard_markduplicates'
-        unique_key_dict = {'uuid': uuid, 'bam_name': bam_name}
-        df_util.save_df_to_sqlalchemy(df, unique_key_dict, table_name, engine, logger)
-        pipe_util.create_already_step(step_dir, 'picard_markduplicates_db', logger)
-        logger.info('completed storing `picard markduplicates` of %s to db' % bam_name)
+def run(uuid, stats_path, bam, input_state, engine, logger, metric_name):
+    data_dict = get_data_dict(stats_path, logger)
+    data_dict['uuid'] = [uuid]
+    data_dict['bam'] = bam
+    data_dict['input_state'] = input_state
+    df = pd.DataFrame(data_dict)
+    table_name = 'picard_' + metric_name
+    df.to_sql(table_name, engine, if_exists='append')
     return

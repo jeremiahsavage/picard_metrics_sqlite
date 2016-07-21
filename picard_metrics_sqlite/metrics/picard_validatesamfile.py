@@ -3,10 +3,10 @@ from collections import defaultdict
 
 import pandas as pd
 
-def store_validate(uuid, bam, validate_file, engine, logger):
+def run(uuid, stats_path, bam, input_state, engine, logger):
     val_error_dict = defaultdict(dict)
-    with open(validate_file, 'r') as validate_file_open:
-        for line in validate_file_open:
+    with open(stats_path, 'r') as f_open:
+        for line in f_open:
             if line.startswith('ERROR:'):
                 validation_type = 'ERROR'
                 line_split = line.strip().split(',')
@@ -93,7 +93,6 @@ def store_validate(uuid, bam, validate_file, engine, logger):
         logger.info('store_validate_error() store_dict=%s' % store_dict)
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
-        unique_key_dict = {'uuid': uuid, 'bam': bam, 'error': akey}
         df.to_sql(table_name, engine, if_exists='append')
     validation_type = 'WARNING'
     for akey in sorted(val_error_dict[validation_type].keys()):
@@ -106,7 +105,6 @@ def store_validate(uuid, bam, validate_file, engine, logger):
         logger.info('store_validate_error() store_dict=%s' % store_dict)
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
-        unique_key_dict = {'uuid': uuid, 'bam': bam, 'error': akey}
         df.to_sql(table_name, engine, if_exists='append')
     validation_type = 'PASS'
     for akey in sorted(val_error_dict[validation_type].keys()):
@@ -119,10 +117,5 @@ def store_validate(uuid, bam, validate_file, engine, logger):
         logger.info('store_validate_error() store_dict=%s' % store_dict)
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
-        unique_key_dict = {'uuid': uuid, 'bam': bam, 'error': akey}
         df.to_sql(table_name, engine, if_exists='append')
     return
-
-                    
-def picard_validatesamfile(uuid, bam, input_state, engine, logger):
-    store_validate(uuid, bam, validate_file, engine, logger)

@@ -2,19 +2,17 @@
 
 import argparse
 import logging
+import os
 import sys
 
 import sqlalchemy
 
-import metrics.bam_stats as bam_stats
-import metrics.picard_buildbamindex as picard_buildbamindex
+import metrics.picard_collectalignmentsummarymetrics as picard_collectalignmentsummarymetrics
+import metrics.picard_collectmultiplemetrics as picard_collectmultiplemetrics
 import metrics.picard_collectoxogmetrics as picard_collectoxogmetrics
-import metrics.picard_collectsequencingartifactmetrics as picard_collectsequencingartifactmetrics
 import metrics.picard_markduplicates as picard_markduplicates
-import metrics.picard_mergesamfiles as picard_mergesamfiles
-import metrics.picard_sortsam as picard_sortsam
 import metrics.picard_validatesamfile as picard_validatesamfile
-from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
+#from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
 # from metrics.picard_calculatehsmetrics_tcga import picard_calculatehsmetrics as picard_calculatehsmetrics_tcga
 # from metrics.picard_calculatehsmetrics_target import picard_calculatehsmetrics as picard_calculatehsmetrics_target
 
@@ -57,6 +55,9 @@ def main():
                         required = True,
                         help = 'picard tool'
     )
+    parser.add_argument('--stats_path',
+                        required = True
+    )
     parser.add_argument('--uuid',
                         required = True,
                         help = 'uuid string',
@@ -69,10 +70,7 @@ def main():
     parser.add_argument('--bam',
                         required = False
     )
-    parser.add_argument('--db_snp',
-                        required = False
-    )
-    parser.add_argument('--outbam_name',
+    parser.add_argument('--vcf',
                         required = False
     )
     parser.add_argument('--readgroup_json_path',
@@ -85,7 +83,9 @@ def main():
     
     # setup required parameters
     args = parser.parse_args()
+    input_state = args.input_state
     metric_name = args.metric_name
+    stats_path = args.stats_path
     uuid = args.uuid
 
     logger = setup_logging('picard_' + metric_name, args, uuid)
@@ -102,7 +102,7 @@ def main():
     #     interval_dir = get_param(args, 'interval_dir')
     #     wxs_dict['bait_intervals_path'] = bait_intervals_path
     #     wxs_dict['target_intervals_path'] = target_intervals_path
-    #     picard_calculatehsmetrics_target(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
+    #     picard_calculatehsmetrics_target.run(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
     # elif metric_name == 'CollectHsMetrics_tcga':
     #     bam = get_param(args, 'bam')
     #     fasta = get_param(args, 'fasta')
@@ -110,49 +110,48 @@ def main():
     #     interval_dir = get_param(args, 'interval_dir')
     #     wxs_dict['bait_intervals_path'] = bait_intervals_path
     #     wxs_dict['target_intervals_path'] = target_intervals_path
-    #     picard_calculatehsmetrics_tcga(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
-    if metric_name == 'CollectHsMetrics_gdc':
+    #     picard_calculatehsmetrics_tcga.run(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
+    # if metric_name == 'CollectHsMetrics_gdc':
+    #     bam = get_param(args, 'bam')
+    #     bam_library_kit_json_path = get_param(args, 'bam_library_kit_json_path')
+    #     input_state = get_param(args, 'input_state')
+    #     orig_bam_name = get_param(args, 'outbam_name')
+    #     fasta = get_param(args, 'fasta')
+    #     readgroup_json_path = get_param(args, 'readgroup_json_path')
+    #     picard_calculatehsmetrics_gdc.run(uuid, bam, readgroup_json_path, bam_library_kit_json_path, orig_bam_name, input_state, engine, logger)
+    if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
-        bam_library_kit_json_path = get_param(args, 'bam_library_kit_json_path')
-        input_state = get_param(args, 'input_state')
-        orig_bam_name = get_param(args, 'outbam_name')
         fasta = get_param(args, 'fasta')
-        readgroup_json_path = get_param(args, 'readgroup_json_path')
-        picard_calculatehsmetrics_gdc(uuid, bam, readgroup_json_path, bam_library_kit_json_path, orig_bam_name, input_state, engine, logger)
-    elif metric_name == 'CollectAlignmentSummaryMetrics':
-        bam = get_param(args, 'bam')
-        input_state = get_param(args, 'input_state')
-        fasta = get_param(args, 'fasta')
-        bam_stats.do_picard_metrics(uuid, bam, input_state, fasta, engine, logger, 'CollectAlignmentSummaryMetrics')
+        picard_collectalignmentsummarymetrics.run(uuid, stats_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
         fasta = get_param(args, 'fasta')
-        bam_stats.do_picard_metrics(uuid, bam, input_state, fasta, engine, logger, 'CollectMultipleMetrics', vcf = vcf)
+        picard_collectmultiplemetrics.run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger)
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
-        db_snp = get_param(args, 'db_snp')
-        input_state = get_param(args, 'input_state')
         fasta = get_param(args, 'fasta')
-        picard_collectoxogmetrics.picard_collectoxogmetrics(uuid, bam, db_snp, fasta, input_state, engine, logger)
+        input_state = get_param(args, 'input_state')
+        vcf = get_param(args, 'vcf')
+        picard_collectoxogmetrics.run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
         fasta = get_param(args, 'fasta')
-        bam_stats.do_picard_metrics(uuid, bam, input_state, fasta, engine, logger, 'CollectWgsMetrics')
+        picard_collectwgsmetrics.run(uuid, bam, input_state, fasta, engine, logger, metric_name)
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_markduplicates.bam_markduplicates(uuid, bam, input_state, engine, logger)
-    elif metric_name == 'MarkDuplicatesWithMateCigar':
-        bam = get_param(args, 'bam')
-        input_state = get_param(args, 'input_state')
-        picard_markduplicates.bam_markduplicateswithmatecigar(uuid, bam, input_state, engine, logger)
+        picard_markduplicates.run(uuid, stats_path, bam, input_state, engine, logger, metric_name)
+    # elif metric_name == 'MarkDuplicatesWithMateCigar':
+    #     bam = get_param(args, 'bam')
+    #     input_state = get_param(args, 'input_state')
+    #     picard_markduplicateswithmatecigar.run(uuid, bam, input_state, engine, logger)
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_validatesamfile.picard_validatesamfile(uuid, bam, input_state, engine, logger)
+        picard_validatesamfile.run(uuid, stats_path, bam, input_state, engine, logger)
     else:
         sys.exit('No recognized tool was selected')
         
