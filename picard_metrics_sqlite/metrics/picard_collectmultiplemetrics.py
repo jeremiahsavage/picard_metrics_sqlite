@@ -86,7 +86,7 @@ def run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger):
         table_name_list.append(table_name)
 
     table_name = 'picard_CollectBaseDistributionByCycle'
-    stats_file = stats_base + 'base_distribution_by_cycle_metrics'
+    stats_file = stats_base + '.base_distribution_by_cycle_metrics'
     stats_path = os.path.join(stats_dir, stats_file)
     df = picard_CollectBaseDistributionByCycle_to_df(stats_path, logger)
     if df is not None:
