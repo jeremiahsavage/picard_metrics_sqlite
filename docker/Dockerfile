@@ -19,13 +19,14 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN adduser --disabled-password --gecos '' ubuntu && adduser ubuntu sudo && echo "ubuntu	ALL=(ALL)	NOPASSWD:ALL" >> /etc/sudoers.d/ubuntu
 
 RUN pip3 install picard_metrics_sqlite
 
 WORKDIR /usr/local
 
 RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
+
+RUN adduser --disabled-password --gecos '' ubuntu && adduser ubuntu sudo && echo "ubuntu	ALL=(ALL)	NOPASSWD:ALL" >> /etc/sudoers.d/ubuntu
 
 USER ubuntu
 
