@@ -18,6 +18,5 @@ def run(uuid, stats_path, bam, fasta, input_state, engine, logger, metric_name):
         df['bam'] = bam
         df['input_state'] = input_state
         df['fasta'] = fasta
-        table_name = table_name_list[i]
         df.to_sql(table_name, engine, if_exists='append')
     return
