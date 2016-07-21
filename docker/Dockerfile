@@ -2,8 +2,6 @@ FROM ubuntu:16.04
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
-ENV picard_metrics_sqlite 0.1
-
 USER root
 
 ENV DEBIAN_FRONTEND=noninteractive
