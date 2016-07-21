@@ -1,10 +1,10 @@
 import os
 
-import .metrics_util
+from .metrics_util import picard_select_tsv_to_df
 
 def picard_CollectOxoGMetrics_to_df(stats_path, logger):
     select = 'SAMPLE_ALIAS'
-    df = metrics_util.picard_select_tsv_to_df(stats_path, select, logger)
+    df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
 
