@@ -22,7 +22,7 @@ RUN apt-get clean \
 
 RUN adduser --disabled-password --gecos '' ubuntu && adduser ubuntu sudo && echo "ubuntu	ALL=(ALL)	NOPASSWD:ALL" >> /etc/sudoers.d/ubuntu
 
-RUN pip install picard_metrics_sqlite
+RUN pip3 install picard_metrics_sqlite
 
 WORKDIR /usr/local
 
