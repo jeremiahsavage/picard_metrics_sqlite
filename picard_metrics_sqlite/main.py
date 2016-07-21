@@ -7,11 +7,11 @@ import sys
 
 import sqlalchemy
 
-import .metrics.picard_collectalignmentsummarymetrics as picard_collectalignmentsummarymetrics
-import .metrics.picard_collectmultiplemetrics as picard_collectmultiplemetrics
-import .metrics.picard_collectoxogmetrics as picard_collectoxogmetrics
-import .metrics.picard_markduplicates as picard_markduplicates
-import .metrics.picard_validatesamfile as picard_validatesamfile
+import .metrics import picard_collectalignmentsummarymetrics
+import .metrics import picard_collectmultiplemetrics
+import .metrics import picard_collectoxogmetrics
+import .metrics import picard_markduplicates
+import .metrics import picard_validatesamfile
 #from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
 # from metrics.picard_calculatehsmetrics_tcga import picard_calculatehsmetrics as picard_calculatehsmetrics_tcga
 # from metrics.picard_calculatehsmetrics_target import picard_calculatehsmetrics as picard_calculatehsmetrics_target
