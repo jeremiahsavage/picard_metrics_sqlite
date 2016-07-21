@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(name = 'picard_metrics_sqlite',
       author = 'Jeremiah H. Savage',
       author_email = 'jeremiahsavage@gmail.com',
-      version = 0.5,
+      version = 0.6,
       description = 'store picard metrics in sqlite',
       url = 'https://github.com/jeremiahsavage/picard_metrics_sqlite',
       license = 'Apache 2.0',
