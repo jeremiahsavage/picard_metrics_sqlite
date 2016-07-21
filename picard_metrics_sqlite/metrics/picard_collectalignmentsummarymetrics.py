@@ -1,6 +1,6 @@
 import os
 
-import metrics_util
+import .metrics_util
 
 def picard_CollectAlignmentSummaryMetrics_to_df(stats_path, logger):
     select = 'CATEGORY'

@@ -1,6 +1,6 @@
 import os
 
-from metrics_util import picard_select_tsv_to_df
+from .metrics_util import picard_select_tsv_to_df
 
 
 def picard_CollectAlignmentSummaryMetrics_to_df(stats_path, logger):
