@@ -22,4 +22,7 @@ setup(name = 'picard_metrics_sqlite',
           'Programming Language :: Python :: 2',
           'Programming Language :: Python :: 3',
       ],
+      entry_points={
+          'console_scripts': ['picard_metrics_sqlite=picard_metrics_sqlite.main:main']
+          },
 )
