@@ -14,23 +14,22 @@ RUN apt-get update \
 RUN apt-get update && apt-get install -y --force-yes \
     git \
     python-pip \
-    python-virtualenv \
     python3-dev \
-    sudo \
-    virtualenvwrapper
+    sudo
 
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN adduser --disabled-password --gecos '' ubuntu && adduser ubuntu sudo && echo "ubuntu	ALL=(ALL)	NOPASSWD:ALL" >> /etc/sudoers.d/ubuntu
 
+RUN pip install picard_metrics_sqlite
+
+WORKDIR /usr/local
+
+RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
+
 USER ubuntu
 
 ENV HOME /home/ubuntu
 
 WORKDIR ${HOME}
-
-RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
-
-RUN /bin/bash -c "source ${HOME}/.virtualenvs/p3/bin/activate \
-    && pip install picard_metrics_sqlite"
