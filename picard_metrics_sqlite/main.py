@@ -55,7 +55,7 @@ def main():
                         required = True,
                         help = 'picard tool'
     )
-    parser.add_argument('--stats_path',
+    parser.add_argument('--metric_path',
                         required = True
     )
     parser.add_argument('--uuid',
@@ -85,7 +85,7 @@ def main():
     args = parser.parse_args()
     input_state = args.input_state
     metric_name = args.metric_name
-    stats_path = args.stats_path
+    metric_path = args.metric_path
     uuid = args.uuid
 
     logger = setup_logging('picard_' + metric_name, args, uuid)
@@ -122,19 +122,19 @@ def main():
     if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
-        picard_collectalignmentsummarymetrics.run(uuid, stats_path, bam, fasta, input_state, engine, logger, metric_name)
+        picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
         fasta = get_param(args, 'fasta')
-        picard_collectmultiplemetrics.run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger)
+        picard_collectmultiplemetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger)
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
-        picard_collectoxogmetrics.run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
+        picard_collectoxogmetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
@@ -143,7 +143,7 @@ def main():
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_markduplicates.run(uuid, stats_path, bam, input_state, engine, logger, metric_name)
+        picard_markduplicates.run(uuid, metric_path, bam, input_state, engine, logger, metric_name)
     # elif metric_name == 'MarkDuplicatesWithMateCigar':
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
@@ -151,7 +151,7 @@ def main():
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_validatesamfile.run(uuid, stats_path, bam, input_state, engine, logger)
+        picard_validatesamfile.run(uuid, metric_path, bam, input_state, engine, logger)
     else:
         sys.exit('No recognized tool was selected')
         
