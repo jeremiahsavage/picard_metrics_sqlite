@@ -1,4 +1,4 @@
-import .main
+from . import main
 import sys
 
 if __name__ == '__main__':
