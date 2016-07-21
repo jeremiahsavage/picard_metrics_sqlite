@@ -33,4 +33,4 @@ WORKDIR ${HOME}
 RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
 
 RUN /bin/bash -c "source ${HOME}/.virtualenvs/p3/bin/activate \
-    && pip install picard_metrics_sqlite
+    && pip install picard_metrics_sqlite"
