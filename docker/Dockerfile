@@ -9,9 +9,9 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get upgrade -y --force-yes
+    && apt-get upgrade -y
 
-RUN apt-get update && apt-get install -y --force-yes \
+RUN apt-get update && apt-get install -y \
     git \
     python3-pip \
     python3-dev \
