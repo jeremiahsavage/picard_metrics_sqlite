@@ -6,17 +6,17 @@ import sys
 
 import sqlalchemy
 
-import tools.bam_stats as bam_stats
-import tools.picard_buildbamindex as picard_buildbamindex
-import tools.picard_collectoxogmetrics as picard_collectoxogmetrics
-import tools.picard_collectsequencingartifactmetrics as picard_collectsequencingartifactmetrics
-import tools.picard_markduplicates as picard_markduplicates
-import tools.picard_mergesamfiles as picard_mergesamfiles
-import tools.picard_sortsam as picard_sortsam
-import tools.picard_validatesamfile as picard_validatesamfile
-from tools.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
-# from tools.picard_calculatehsmetrics_tcga import picard_calculatehsmetrics as picard_calculatehsmetrics_tcga
-# from tools.picard_calculatehsmetrics_target import picard_calculatehsmetrics as picard_calculatehsmetrics_target
+import metrics.bam_stats as bam_stats
+import metrics.picard_buildbamindex as picard_buildbamindex
+import metrics.picard_collectoxogmetrics as picard_collectoxogmetrics
+import metrics.picard_collectsequencingartifactmetrics as picard_collectsequencingartifactmetrics
+import metrics.picard_markduplicates as picard_markduplicates
+import metrics.picard_mergesamfiles as picard_mergesamfiles
+import metrics.picard_sortsam as picard_sortsam
+import metrics.picard_validatesamfile as picard_validatesamfile
+from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
+# from metrics.picard_calculatehsmetrics_tcga import picard_calculatehsmetrics as picard_calculatehsmetrics_tcga
+# from metrics.picard_calculatehsmetrics_target import picard_calculatehsmetrics as picard_calculatehsmetrics_target
 
 def get_param(args, param_name):
     if vars(args)[param_name] == None:
@@ -149,15 +149,6 @@ def main():
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
         picard_markduplicates.bam_markduplicateswithmatecigar(uuid, bam, input_state, engine, logger)
-    elif metric_name == 'MergeSamFiles':
-        bam = get_param(args, 'bam')
-        input_state = get_param(args, 'input_state')
-        outbam_name = get_param(args, 'outbam_name')
-        picard_mergesamfiles.picard_mergesamfiles(uuid, bam, input_state, outbam_name, engine, logger)
-    elif metric_name == 'SortSam':
-        bam = get_param(args, 'bam')
-        input_state = get_param(args, 'input_state')
-        picard_sortsam.picard_sortsam(uuid, bam, input_state, engine, logger)
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
