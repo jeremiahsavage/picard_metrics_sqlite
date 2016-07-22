@@ -10,6 +10,7 @@ import sqlalchemy
 from .metrics import picard_collectalignmentsummarymetrics
 from .metrics import picard_collectmultiplemetrics
 from .metrics import picard_collectoxogmetrics
+from .metrics import picard_collectwgsmetrics
 from .metrics import picard_markduplicates
 from .metrics import picard_validatesamfile
 #from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
@@ -125,9 +126,9 @@ def main():
         picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
+        fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
-        fasta = get_param(args, 'fasta')
         picard_collectmultiplemetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger)
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
@@ -137,9 +138,9 @@ def main():
         picard_collectoxogmetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
-        input_state = get_param(args, 'input_state')
         fasta = get_param(args, 'fasta')
-        picard_collectwgsmetrics.run(uuid, bam, input_state, fasta, engine, logger, metric_name)
+        input_state = get_param(args, 'input_state')
+        picard_collectwgsmetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
