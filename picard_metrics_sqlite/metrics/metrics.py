@@ -1,15 +1,3 @@
-def picard_CollectWgsMetrics_metrics_to_df(stats_path, logger):
-    select = 'GENOME_TERRITORY'
-    df = picard_select_tsv_to_df(stats_path, select, logger)
-    return df
-
-
-def picard_CollectWgsMetrics_histogram_to_df(stats_path, logger):
-    select = 'coverage'
-    df = picard_select_tsv_to_df(stats_path, select, logger)
-    return df
-
-
 def picard_CalculateHsMetrics_to_df(stats_path, logger):
     select = 'BAIT_SET'
     df = picard_select_tsv_to_df(stats_path, select, logger)
@@ -29,18 +17,6 @@ def do_picard_metrics(uuid, stats_path, input_state, bam, fasta, engine, logger,
         pass
     elif metrics_type == 'EstimateLibraryComplexity':
         pass
-    elif metrics_type == 'CollectWgsMetrics':
-        table_name = 'picard_' + metrics_type
-        df = picard_CollectWgsMetrics_metrics_to_df(stats_path, logger)
-        if df is not None:
-            df_list.append(df)
-            table_name_list.append(table_name)
-
-        df = picard_CollectWgsMetrics_histogram_to_df(stats_path, logger)
-        if df is not None:
-            df_list.append(df)
-            table_name += '_histogram'
-            table_name_list.append(table_name)
     elif metrics_type == 'CalculateHsMetrics':
         table_name = 'picard_' + metrics_type
         df = picard_CalculateHsMetrics_to_df(stats_path, logger)
