@@ -90,7 +90,7 @@ def run(uuid, stats_path, bam, input_state, engine, logger):
         store_dict['uuid'] = [uuid]  # a non scalar
         store_dict['bam'] = bam
         store_dict['severity'] = validation_type
-        logger.info('store_validate_error() store_dict=%s' % store_dict)
+        store_dict['input_state'] = input_state
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
         df.to_sql(table_name, engine, if_exists='append')
@@ -102,7 +102,7 @@ def run(uuid, stats_path, bam, input_state, engine, logger):
         store_dict['uuid'] = [uuid]  # a non scalar
         store_dict['bam'] = bam
         store_dict['severity'] = validation_type
-        logger.info('store_validate_error() store_dict=%s' % store_dict)
+        store_dict['input_state'] = input_state
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
         df.to_sql(table_name, engine, if_exists='append')
@@ -114,7 +114,7 @@ def run(uuid, stats_path, bam, input_state, engine, logger):
         store_dict['uuid'] = [uuid]  # a non scalar
         store_dict['bam'] = bam
         store_dict['severity'] = validation_type
-        logger.info('store_validate_error() store_dict=%s' % store_dict)
+        store_dict['input_state'] = input_state
         df = pd.DataFrame(store_dict)
         table_name = 'picard_ValidateSamFile'
         df.to_sql(table_name, engine, if_exists='append')
