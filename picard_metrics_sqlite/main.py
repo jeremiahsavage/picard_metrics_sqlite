@@ -122,7 +122,10 @@ def main():
     #     picard_calculatehsmetrics_gdc.run(uuid, bam, readgroup_json_path, bam_library_kit_json_path, orig_bam_name, input_state, engine, logger)
     if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
-        fasta = get_param(args, 'fasta')
+        if vars(args)['fasta'] == None:
+            fasta = None
+        else:
+            fasta = vars(args)['fasta']
         picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
