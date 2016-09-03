@@ -13,9 +13,7 @@ from .metrics import picard_collectoxogmetrics
 from .metrics import picard_collectwgsmetrics
 from .metrics import picard_markduplicates
 from .metrics import picard_validatesamfile
-#from metrics.picard_calculatehsmetrics_gdc import picard_calculatehsmetrics as picard_calculatehsmetrics_gdc
-# from metrics.picard_calculatehsmetrics_tcga import picard_calculatehsmetrics as picard_calculatehsmetrics_tcga
-# from metrics.picard_calculatehsmetrics_target import picard_calculatehsmetrics as picard_calculatehsmetrics_target
+from .metrics import picard_collecthsmetrics
 
 def get_param(args, param_name):
     if vars(args)[param_name] == None:
@@ -23,7 +21,7 @@ def get_param(args, param_name):
     else:
         return vars(args)[param_name]
     return
-    
+
 def setup_logging(tool_name, args, uuid):
     logging.basicConfig(
         filename=os.path.join(uuid + '_' + tool_name + '.log'),
@@ -47,7 +45,7 @@ def main():
         help = 'Enable debug logging.',
     )
     parser.set_defaults(level = logging.INFO)
-    
+
     # Required flags.
     parser.add_argument('--input_state',
                         required = True
@@ -63,25 +61,27 @@ def main():
                         required = True,
                         help = 'uuid string',
     )
-    
+
     # Tool flags
-    parser.add_argument('--bam_library_kit_json_path',
+    parser.add_argument('--bait',
                         required = False
     )
     parser.add_argument('--bam',
                         required = False
     )
-    parser.add_argument('--vcf',
-                        required = False
-    )
-    parser.add_argument('--readgroup_json_path',
+    parser.add_argument('--bam_library',
                         required = False
     )
     parser.add_argument('--fasta',
                         required = False
     )
+    parser.add_argument('--target',
+                        required = False
+    )
+    parser.add_argument('--vcf',
+                        required = False
+    )
 
-    
     # setup required parameters
     args = parser.parse_args()
     input_state = args.input_state
@@ -95,31 +95,6 @@ def main():
     engine_path = 'sqlite:///' + sqlite_name
     engine = sqlalchemy.create_engine(engine_path, isolation_level='SERIALIZABLE')
 
-
-    # elif metric_name == 'CollectHsMetrics_target':
-    #     bam = get_param(args, 'bam')
-    #     fasta = get_param(args, 'fasta')
-    #     json_path = get_param(args, 'json_path')
-    #     interval_dir = get_param(args, 'interval_dir')
-    #     wxs_dict['bait_intervals_path'] = bait_intervals_path
-    #     wxs_dict['target_intervals_path'] = target_intervals_path
-    #     picard_calculatehsmetrics_target.run(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
-    # elif metric_name == 'CollectHsMetrics_tcga':
-    #     bam = get_param(args, 'bam')
-    #     fasta = get_param(args, 'fasta')
-    #     json_path = get_param(args, 'json_path')
-    #     interval_dir = get_param(args, 'interval_dir')
-    #     wxs_dict['bait_intervals_path'] = bait_intervals_path
-    #     wxs_dict['target_intervals_path'] = target_intervals_path
-    #     picard_calculatehsmetrics_tcga.run(uuid, bam, input_state, json_path, interval_dir, engine, logger, wxs_dict = wxs_dict)
-    # if metric_name == 'CollectHsMetrics_gdc':
-    #     bam = get_param(args, 'bam')
-    #     bam_library_kit_json_path = get_param(args, 'bam_library_kit_json_path')
-    #     input_state = get_param(args, 'input_state')
-    #     orig_bam_name = get_param(args, 'outbam_name')
-    #     fasta = get_param(args, 'fasta')
-    #     readgroup_json_path = get_param(args, 'readgroup_json_path')
-    #     picard_calculatehsmetrics_gdc.run(uuid, bam, readgroup_json_path, bam_library_kit_json_path, orig_bam_name, input_state, engine, logger)
     if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
         if vars(args)['fasta'] == None:
@@ -127,6 +102,14 @@ def main():
         else:
             fasta = vars(args)['fasta']
         picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
+    elif metric_name == 'CollectHsMetrics':
+        bait = get_param(args, 'bait')
+        bam = get_param(args, 'bam')
+        bam_library = get_param(args, 'bam_library')
+        input_state = get_param(args, 'input_state')
+        fasta = get_param(args, 'fasta')
+        target = get_param(args, 'target')
+        picard_calculatehsmetrics.run(uuid, metric_path, bam, bam_library, bait, target, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
@@ -152,6 +135,10 @@ def main():
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
     #     picard_markduplicateswithmatecigar.run(uuid, bam, input_state, engine, logger)
+    # elif metric_name == 'FixMateInformation':
+    #     bam = get_param(args, 'bam')
+    #     input_state = get_param(args, 'input_state')
+    #     picard_fixmateinformation.run(uuid, bam, input_state, engine, logger)
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
@@ -160,7 +147,6 @@ def main():
         sys.exit('No recognized tool was selected')
         
     return
-
 
 if __name__ == '__main__':
     main()
