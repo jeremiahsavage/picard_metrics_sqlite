@@ -2,6 +2,8 @@ FROM ubuntu:xenial-20160809
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
+env VERSION 0.17
+
 RUN apt-get update \
     && apt-get install -y \
        python3-pandas \
@@ -11,5 +13,3 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && pip3 install picard_metrics_sqlite
-
-#RUN git clone https://github.com/jeremiahsavage/exome_intervals.git
