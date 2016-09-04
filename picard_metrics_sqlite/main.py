@@ -8,12 +8,12 @@ import sys
 import sqlalchemy
 
 from .metrics import picard_collectalignmentsummarymetrics
+from .metrics import picard_collecthsmetrics
 from .metrics import picard_collectmultiplemetrics
 from .metrics import picard_collectoxogmetrics
 from .metrics import picard_collectwgsmetrics
 from .metrics import picard_markduplicates
 from .metrics import picard_validatesamfile
-from .metrics import picard_collecthsmetrics
 
 def get_param(args, param_name):
     if vars(args)[param_name] == None:
