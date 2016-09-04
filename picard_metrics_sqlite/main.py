@@ -105,7 +105,7 @@ def main():
         input_state = get_param(args, 'input_state')
         exome_kit = get_param(args, 'exome_kit')
         fasta = get_param(args, 'fasta')
-        picard_calculatehsmetrics.run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
+        picard_collecthsmetrics.run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
