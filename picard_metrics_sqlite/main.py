@@ -63,19 +63,16 @@ def main():
     )
 
     # Tool flags
-    parser.add_argument('--bait',
-                        required = False
-    )
     parser.add_argument('--bam',
                         required = False
     )
     parser.add_argument('--bam_library',
                         required = False
     )
-    parser.add_argument('--fasta',
+    parser.add_argument('--exome_kit',
                         required = False
     )
-    parser.add_argument('--target',
+    parser.add_argument('--fasta',
                         required = False
     )
     parser.add_argument('--vcf',
@@ -103,13 +100,12 @@ def main():
             fasta = vars(args)['fasta']
         picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':
-        bait = get_param(args, 'bait')
         bam = get_param(args, 'bam')
         bam_library = get_param(args, 'bam_library')
         input_state = get_param(args, 'input_state')
+        exome_kit = get_param(args, 'exome_kit')
         fasta = get_param(args, 'fasta')
-        target = get_param(args, 'target')
-        picard_calculatehsmetrics.run(uuid, metric_path, bam, bam_library, bait, target, fasta, input_state, engine, logger, metric_name)
+        picard_calculatehsmetrics.run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
