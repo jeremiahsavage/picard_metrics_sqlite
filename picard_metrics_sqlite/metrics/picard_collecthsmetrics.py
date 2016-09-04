@@ -19,7 +19,7 @@ def run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engi
     df['exome_kit'] = exome_kit
     df['fasta'] = fasta
     df['input_state'] = input_state
-    df['library'] = bam_library
+    df['readgroup_library'] = bam_library
     df['uuid'] = uuid
     df.to_sql(table_name, engine, if_exists='append')
 
@@ -29,7 +29,7 @@ def run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engi
     df['exome_kit'] = exome_kit
     df['fasta'] = fasta
     df['input_state'] = input_state
-    df['library'] = bam_library
+    df['readgroup_library'] = bam_library
     df['uuid'] = uuid
     df.to_sql(table_name, engine, if_exists='append')    
     return
