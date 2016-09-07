@@ -3,25 +3,37 @@ import os
 from .metrics_util import picard_select_tsv_to_df
 
 
-def picard_CollectAlignmentSummaryMetrics_to_df(stats_path, logger):
+def picard_AlignmentSummaryMetrics_to_df(stats_path, logger):
     select = 'CATEGORY'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
-
-def picard_CollectBaseDistributionByCycle_to_df(stats_path, logger):
+def picard_BaseDistributionByCycle_to_df(stats_path, logger):
     select = 'READ_END'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
+def picard_CollectQualityYieldMetrics_to_df(stats_path, logger):
+    select = 'TOTAL_READS'
+    df = picard_select_tsv_to_df(stats_path, select, logger)
+    return df
 
-def picard_CollectInsertSizeMetrics_metrics_to_df(stats_path, logger):
+def picard_GcBiasDetailMetrics_to_df(stats_path, logger):
+    select = 'ACCUMULATION_LEVEL'
+    df = picard_select_tsv_to_df(stats_path, select, logger)
+    return df
+
+def picard_GcBiasSummaryMetrics_to_df(stats_path, logger):
+    select = 'ACCUMULATION_LEVEL'
+    df = picard_select_tsv_to_df(stats_path, select, logger)
+    return df
+
+def picard_InsertSizeMetrics_metrics_to_df(stats_path, logger):
     select = 'MEDIAN_INSERT_SIZE'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
-
-def picard_CollectInsertSizeMetrics_histogram_to_df(stats_path, logger):
+def picard_InsertSizeMetrics_histogram_to_df(stats_path, logger):
     select = 'insert_size'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     if df is not None:
@@ -37,110 +49,60 @@ def picard_CollectInsertSizeMetrics_histogram_to_df(stats_path, logger):
             df[needed_column] = None
     return df
 
-
 def picard_MeanQualityByCycle_to_df(stats_path, logger):
     select = 'CYCLE'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
-
-
-def picard_CollectQualityYieldMetrics_to_df(stats_path, logger):
-    select = 'TOTAL_READS'
-    df = picard_select_tsv_to_df(stats_path, select, logger)
-    return df
-
 
 def picard_QualityScoreDistribution_to_df(stats_path, logger):
     select = 'QUALITY'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
-
-def picard_CollectGcBiasMetrics_to_df(stats_path, logger):
-    select = 'ACCUMULATION_LEVEL'
+def picard_SequencingArtifactMetrics_BaitBiasDetailMetrics_to_df(stats_path, logger):
+    select = 'SAMPLE_ALIAS'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
+def picard_SequencingArtifactMetrics_BaitBiasSummaryMetrics_to_df(stats_path, logger):
+    select = 'SAMPLE_ALIAS'
+    df = picard_select_tsv_to_df(stats_path, select, logger)
+    return df
 
-def picard_CollectSequencingArtifactMetrics_to_df(stats_path, logger):
+def picard_SequencingArtifactMetrics_PreAdapterDetailMetrics_to_df(stats_path, logger):
+    select = 'SAMPLE_ALIAS'
+    df = picard_select_tsv_to_df(stats_path, select, logger)
+    return df
+
+def picard_SequencingArtifactMetrics_PreAdapterSummaryMetrics_to_df(stats_path, logger):
     select = 'SAMPLE_ALIAS'
     df = picard_select_tsv_to_df(stats_path, select, logger)
     return df
 
 
-def run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger):
-    stats_dir = os.path.dirname(stats_path)
-    stats_name = os.path.basename(stats_path)
-    stats_base, stats_ext = os.path.splitext(stats_name)
+def run(bam, engine, fasta, input_state, logger, uuid, vcf,
+        alignment_summary_metrics, bait_bias_detail_metrics,
+        bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
+        gc_bias.detail_metrics, gc_bias.summary_metrics,
+        insert_size_metrics, pre_adapter_detail_metrics,
+        pre_adapter_summary_metrics, quality_by_cycle_metrics,
+        quality_distribution_metrics, quality_yield_metrics):
 
     df_list = list()
     table_name_list = list()
 
-    
-    table_name = 'picard_CollectAlignmentSummaryMetrics'
-    stats_file = stats_base + '.alignment_summary_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectAlignmentSummaryMetrics_to_df(stats_path, logger)
+    table_name = 'picard_AlignmentSummaryMetrics'
+    stats_path = alignment_summary_metrics
+    df = picard_AlignmentSummaryMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
         table_name_list.append(table_name)
 
-    table_name = 'picard_CollectBaseDistributionByCycle'
-    stats_file = stats_base + '.base_distribution_by_cycle_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectBaseDistributionByCycle_to_df(stats_path, logger)
+    table_name = 'picard_BaseDistributionByCycleMetrics'
+    stats_path = base_distribution_by_cycle_metrics
+    df = picard_BaseDistributionByCycle_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
-        table_name_list.append(table_name)
-
-    table_name = 'picard_CollectInsertSizeMetric'
-    stats_file = stats_base + '.insert_size_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectInsertSizeMetrics_metrics_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name += '_metrics'
-        table_name_list.append(table_name)
-
-    table_name = 'picard_CollectInsertSizeMetric'
-    df = picard_CollectInsertSizeMetrics_histogram_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name += '_histogram'
-        table_name_list.append(table_name)
-
-    table_name = 'picard_MeanQualityByCycle'
-    stats_file = stats_base + '.quality_by_cycle_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_MeanQualityByCycle_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name_list.append(table_name)
-
-    table_name = 'picard_QualityScoreDistribution'
-    stats_file = stats_base + '.quality_distribution_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_QualityScoreDistribution_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name_list.append(table_name)
-
-    table_name = 'picard_CollectGcBiasMetrics'
-    stats_file = stats_base + '.gc_bias.summary_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectGcBiasMetrics_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name += '_summary'
-        table_name_list.append(table_name)
-
-    table_name = 'picard_CollectGcBiasMetrics'
-    stats_file = stats_base + '.gc_bias.detail_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectGcBiasMetrics_to_df(stats_path, logger)
-    if df is not None:
-        df_list.append(df)
-        table_name += '_detail'
         table_name_list.append(table_name)
 
     table_name = 'picard_CollectQualityYieldMetrics'
@@ -151,22 +113,74 @@ def run(uuid, stats_path, bam, fasta, vcf, input_state, engine, logger):
         df_list.append(df)
         table_name_list.append(table_name)
 
-    table_name = 'picard_CollectSequencingArtifactMetrics'
-    stats_file = stats_base + '.pre_adapter_detail_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectSequencingArtifactMetrics_to_df(stats_path, logger)
+    table_name = 'picard_GcBiasDetailMetrics'
+    stats_path = gc_bias.detail_metrics
+    df = picard_GcBiasDetailMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
-        table_name += '_detail'
         table_name_list.append(table_name)
 
-    table_name = 'picard_CollectSequencingArtifactMetrics'
-    stats_file = stats_base + '.pre_adapter_summary_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
-    df = picard_CollectSequencingArtifactMetrics_to_df(stats_path, logger)
+    table_name = 'picard_GcBiasSummaryMetrics'
+    stats_path = gc_bias.summary_metrics
+    df = picard_GcBiasSummaryMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
-        table_name += '_summary'
+        table_name_list.append(table_name)
+
+    table_name = 'picard_InsertSizeMetrics'
+    stats_path = insert_size_metrics
+    df = picard_InsertSizeMetrics_metrics_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_InsertSizeMetrics_histogram'
+    df = picard_InsertSizeMetrics_histogram_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_MeanQualityByCycle'
+    stats_path = quality_by_cycle_metrics
+    df = picard_MeanQualityByCycle_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_QualityScoreDistribution'
+    stats_path = quality_distribution_metrics
+    df = picard_QualityScoreDistribution_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_SequencingArtifactMetrics.BaitBiasDetailMetrics'
+    stats_path = bait_bias_detail_metrics
+    df = picard_SequencingArtifactMetrics_BaitBiasDetailMetrics_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_SequencingArtifactMetrics.BaitBiasSummaryMetrics'
+    stats_path = bait_bias_summary_metrics
+    df = picard_SequencingArtifactMetrics_BaitBiasSummaryMetrics_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_SequencingArtifactMetrics.PreAdapterDetailMetrics'
+    stats_path = pre_adapter_detail_metrics
+    df = picard_SequencingArtifactMetrics_PreAdapterDetailMetrics_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
+        table_name_list.append(table_name)
+
+    table_name = 'picard_SequencingArtifactMetrics.PreAdapterSummaryMetrics'
+    stats_file = stats_base + '.pre_adapter_summary_metrics'
+    stats_path = os.path.join(stats_dir, stats_file)
+    df = picard_SequencingArtifactMetrics_PreAdapterSummaryMetrics_to_df(stats_path, logger)
+    if df is not None:
+        df_list.append(df)
         table_name_list.append(table_name)
             
     for i, df in enumerate(df_list):
