@@ -17,7 +17,7 @@ from .metrics import picard_validatesamfile
 
 def get_param(args, param_name):
     if vars(args)[param_name] == None:
-        sys.exit('--'+ param_name + ' is required')
+        return None
     else:
         return vars(args)[param_name]
     return
@@ -111,7 +111,26 @@ def main():
         fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
-        picard_collectmultiplemetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger)
+        alignment_summary_metrics = get_param(args, 'alignment_summary_metrics')
+        bait_bias_detail_metrics = get_param(args, 'bait_bias_detail_metrics')
+        bait_bias_summary_metrics = get_param(args, 'bait_bias_summary_metrics')
+        base_distribution_by_cycle_metrics = get_param(args, 'base_distribution_by_cycle_metrics')
+        gc_bias.detail_metrics = get_param(args, 'gc_bias.detail_metrics')
+        gc_bias.summary_metrics = get_param(args, 'gc_bias.summary_metrics')
+        insert_size_metrics = get_param(args, 'insert_size_metrics')
+        pre_adapter_detail_metrics = get_param(args, 'pre_adapter_detail_metrics')
+        pre_adapter_summary_metrics = get_param(args, 'pre_adapter_summary_metrics')
+        quality_by_cycle_metrics = get_param(args, 'quality_by_cycle_metrics')
+        quality_distribution_metrics = get_param(args, 'quality_distribution_metrics')
+        quality_yield_metrics = get_param(args, 'quality_yield_metrics')
+        picard_collectmultiplemetrics.run(bam, engine, fasta, input_state, logger, uuid, vcf,
+                                          alignment_summary_metrics, bait_bias_detail_metrics,
+                                          bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
+                                          gc_bias.detail_metrics, gc_bias.summary_metrics,
+                                          insert_size_metrics, pre_adapter_detail_metrics,
+                                          pre_adapter_summary_metrics, quality_by_cycle_metrics,
+                                          quality_distribution_metrics, quality_yield_metrics                                          
+        )
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
