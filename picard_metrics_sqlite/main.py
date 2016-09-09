@@ -55,7 +55,7 @@ def main():
                         help = 'picard tool'
     )
     parser.add_argument('--metric_path',
-                        required = True
+                        required = False
     )
     parser.add_argument('--uuid',
                         required = True,
