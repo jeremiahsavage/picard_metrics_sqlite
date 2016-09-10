@@ -113,7 +113,7 @@ def main():
     parser.add_argument('--quality_distribution_metrics',
                         required = False
     )
-    parser.add_argument('--quality_distribution_metrics',
+    parser.add_argument('--quality_yield_metrics',
                         required = False
     )
     
