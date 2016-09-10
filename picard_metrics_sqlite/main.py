@@ -115,8 +115,8 @@ def main():
         bait_bias_detail_metrics = get_param(args, 'bait_bias_detail_metrics')
         bait_bias_summary_metrics = get_param(args, 'bait_bias_summary_metrics')
         base_distribution_by_cycle_metrics = get_param(args, 'base_distribution_by_cycle_metrics')
-        gc_bias.detail_metrics = get_param(args, 'gc_bias.detail_metrics')
-        gc_bias.summary_metrics = get_param(args, 'gc_bias.summary_metrics')
+        gc_bias_detail_metrics = get_param(args, 'gc_bias_detail_metrics')
+        gc_bias_summary_metrics = get_param(args, 'gc_bias_summary_metrics')
         insert_size_metrics = get_param(args, 'insert_size_metrics')
         pre_adapter_detail_metrics = get_param(args, 'pre_adapter_detail_metrics')
         pre_adapter_summary_metrics = get_param(args, 'pre_adapter_summary_metrics')
@@ -126,7 +126,7 @@ def main():
         picard_collectmultiplemetrics.run(bam, engine, fasta, input_state, logger, uuid, vcf,
                                           alignment_summary_metrics, bait_bias_detail_metrics,
                                           bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
-                                          gc_bias.detail_metrics, gc_bias.summary_metrics,
+                                          gc_bias_detail_metrics, gc_bias_summary_metrics,
                                           insert_size_metrics, pre_adapter_detail_metrics,
                                           pre_adapter_summary_metrics, quality_by_cycle_metrics,
                                           quality_distribution_metrics, quality_yield_metrics                                          

@@ -83,7 +83,7 @@ def picard_SequencingArtifactMetrics_PreAdapterSummaryMetrics_to_df(stats_path, 
 def run(bam, engine, fasta, input_state, logger, uuid, vcf,
         alignment_summary_metrics, bait_bias_detail_metrics,
         bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
-        gc_bias.detail_metrics, gc_bias.summary_metrics,
+        gc_bias_detail_metrics, gc_bias_summary_metrics,
         insert_size_metrics, pre_adapter_detail_metrics,
         pre_adapter_summary_metrics, quality_by_cycle_metrics,
         quality_distribution_metrics, quality_yield_metrics):
@@ -114,14 +114,14 @@ def run(bam, engine, fasta, input_state, logger, uuid, vcf,
         table_name_list.append(table_name)
 
     table_name = 'picard_GcBiasDetailMetrics'
-    stats_path = gc_bias.detail_metrics
+    stats_path = gc_bias_detail_metrics
     df = picard_GcBiasDetailMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
         table_name_list.append(table_name)
 
     table_name = 'picard_GcBiasSummaryMetrics'
-    stats_path = gc_bias.summary_metrics
+    stats_path = gc_bias_summary_metrics
     df = picard_GcBiasSummaryMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
