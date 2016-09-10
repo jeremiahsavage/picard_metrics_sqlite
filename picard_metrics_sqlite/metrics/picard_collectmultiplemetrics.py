@@ -106,8 +106,7 @@ def run(bam, engine, fasta, input_state, logger, uuid, vcf,
         table_name_list.append(table_name)
 
     table_name = 'picard_CollectQualityYieldMetrics'
-    stats_file = stats_base + '.quality_yield_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
+    stats_path = quality_yield_metrics
     df = picard_CollectQualityYieldMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
@@ -176,8 +175,7 @@ def run(bam, engine, fasta, input_state, logger, uuid, vcf,
         table_name_list.append(table_name)
 
     table_name = 'picard_SequencingArtifactMetrics.PreAdapterSummaryMetrics'
-    stats_file = stats_base + '.pre_adapter_summary_metrics'
-    stats_path = os.path.join(stats_dir, stats_file)
+    stats_path = pre_adapter_summary_metrics
     df = picard_SequencingArtifactMetrics_PreAdapterSummaryMetrics_to_df(stats_path, logger)
     if df is not None:
         df_list.append(df)
