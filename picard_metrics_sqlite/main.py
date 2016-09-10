@@ -79,6 +79,44 @@ def main():
                         required = False
     )
 
+    #cmm
+    parser.add_argument('--alignment_summary_metrics',
+                        required = False
+    )
+    parser.add_argument('--bait_bias_detail_metrics',
+                        required = False
+    )
+    parser.add_argument('--bait_bias_summary_metrics',
+                        required = False
+    )
+    parser.add_argument('--base_distribution_by_cycle_metrics',
+                        required = False
+    )
+    parser.add_argument('--gc_bias_detail_metrics',
+                        required = False
+    )
+    parser.add_argument('--gc_bias_summary_metrics',
+                        required = False
+    )
+    parser.add_argument('--insert_size_metrics',
+                        required = False
+    )
+    parser.add_argument('--pre_adapter_detail_metrics',
+                        required = False
+    )
+    parser.add_argument('--pre_adapter_summary_metrics',
+                        required = False
+    )
+    parser.add_argument('--quality_by_cycle_metrics',
+                        required = False
+    )
+    parser.add_argument('--quality_distribution_metrics',
+                        required = False
+    )
+    parser.add_argument('--quality_distribution_metrics',
+                        required = False
+    )
+    
     # setup required parameters
     args = parser.parse_args()
     input_state = args.input_state
