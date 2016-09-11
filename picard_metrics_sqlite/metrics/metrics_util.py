@@ -29,6 +29,8 @@ def all_tsv_to_df(tsv_path, logger):
 def picard_select_tsv_to_df(stats_path, select, logger):
     read_header = False
     data_dict = dict()
+    if stats_path is None:
+        return None
     if not os.path.exists(stats_path):
         logger.info('the stats file %s do not exist, so return None' % stats_path)
         return None
