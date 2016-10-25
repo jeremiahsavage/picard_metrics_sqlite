@@ -13,6 +13,8 @@ RUN echo 'Acquire::http::Proxy "http://cloud-proxy:3128";' >> /etc/apt/apt.conf.
        python3-sqlalchemy \
        wget \
     && apt-get clean \
+    && export http_proxy=http://cloud-proxy:3128 \
+    && export https_proxy=http://cloud-proxy:3128 \
     && pip3 install picard_metrics_sqlite \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && rm -f /etc/apt/apt.conf.d/01proxy
