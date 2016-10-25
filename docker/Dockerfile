@@ -1,4 +1,4 @@
-FROM ubuntu:xenial-20160809
+FROM ubuntu:xenial-20161010
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
@@ -11,5 +11,5 @@ RUN apt-get update \
        python3-sqlalchemy \
        wget \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && pip3 install picard_metrics_sqlite
+    && pip3 install picard_metrics_sqlite \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
