@@ -11,6 +11,7 @@ from .metrics import picard_collectalignmentsummarymetrics
 from .metrics import picard_collecthsmetrics
 from .metrics import picard_collectmultiplemetrics
 from .metrics import picard_collectoxogmetrics
+from .metrics import picard_collectrnaseqmetrics
 from .metrics import picard_collectwgsmetrics
 from .metrics import picard_markduplicates
 from .metrics import picard_validatesamfile
@@ -57,7 +58,7 @@ def main():
     parser.add_argument('--metric_path',
                         required = False
     )
-    parser.add_argument('--uuid',
+    parser.add_argument('--run_uuid',
                         required = True,
                         help = 'uuid string',
     )
@@ -73,6 +74,12 @@ def main():
                         required = False
     )
     parser.add_argument('--fasta',
+                        required = False
+    )
+    parser.add_argument('--ref_flat',
+                        required = False
+    )
+    parser.add_argument('--ribosomal_intervals',
                         required = False
     )
     parser.add_argument('--vcf',
@@ -122,11 +129,11 @@ def main():
     input_state = args.input_state
     metric_name = args.metric_name
     metric_path = args.metric_path
-    uuid = args.uuid
+    run_uuid = args.run_uuid
 
-    logger = setup_logging('picard_' + metric_name, args, uuid)
+    logger = setup_logging('picard_' + metric_name, args, run_uuid)
 
-    sqlite_name = uuid + '.db'
+    sqlite_name = run_uuid + '.db'
     engine_path = 'sqlite:///' + sqlite_name
     engine = sqlalchemy.create_engine(engine_path, isolation_level='SERIALIZABLE')
 
@@ -136,14 +143,14 @@ def main():
             fasta = None
         else:
             fasta = vars(args)['fasta']
-        picard_collectalignmentsummarymetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
+        picard_collectalignmentsummarymetrics.run(run_uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':
         bam = get_param(args, 'bam')
         bam_library = get_param(args, 'bam_library')
         input_state = get_param(args, 'input_state')
         exome_kit = get_param(args, 'exome_kit')
         fasta = get_param(args, 'fasta')
-        picard_collecthsmetrics.run(uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
+        picard_collecthsmetrics.run(run_uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
@@ -161,7 +168,7 @@ def main():
         quality_by_cycle_metrics = get_param(args, 'quality_by_cycle_metrics')
         quality_distribution_metrics = get_param(args, 'quality_distribution_metrics')
         quality_yield_metrics = get_param(args, 'quality_yield_metrics')
-        picard_collectmultiplemetrics.run(bam, engine, fasta, input_state, logger, uuid, vcf,
+        picard_collectmultiplemetrics.run(bam, engine, fasta, input_state, logger, run_uuid, vcf,
                                           alignment_summary_metrics, bait_bias_detail_metrics,
                                           bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
                                           gc_bias_detail_metrics, gc_bias_summary_metrics,
@@ -174,28 +181,32 @@ def main():
         fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
         vcf = get_param(args, 'vcf')
-        picard_collectoxogmetrics.run(uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
+        picard_collectoxogmetrics.run(run_uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
+    elif metric_name == 'CollectRnaSeqMetrics':
+        bam = get_param(args, 'bam')
+        input_state = get_param(args, 'input_state')
+        picard_collectrnaseqmetrics.run(run_uuid, metric_path, bam, fasta, ref_flat, ribosomal_intervals, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
         fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
-        picard_collectwgsmetrics.run(uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
+        picard_collectwgsmetrics.run(run_uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_markduplicates.run(uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_markduplicates.run(run_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     # elif metric_name == 'MarkDuplicatesWithMateCigar':
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
-    #     picard_markduplicateswithmatecigar.run(uuid, bam, input_state, engine, logger)
+    #     picard_markduplicateswithmatecigar.run(run_uuid, bam, input_state, engine, logger)
     # elif metric_name == 'FixMateInformation':
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
-    #     picard_fixmateinformation.run(uuid, bam, input_state, engine, logger)
+    #     picard_fixmateinformation.run(run_uuid, bam, input_state, engine, logger)
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_validatesamfile.run(uuid, metric_path, bam, input_state, engine, logger)
+        picard_validatesamfile.run(run_uuid, metric_path, bam, input_state, engine, logger)
     else:
         sys.exit('No recognized tool was selected')
         
