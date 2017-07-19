@@ -23,9 +23,9 @@ def get_param(args, param_name):
         return vars(args)[param_name]
     return
 
-def setup_logging(tool_name, args, uuid):
+def setup_logging(tool_name, args, run_uuid):
     logging.basicConfig(
-        filename=os.path.join(uuid + '_' + tool_name + '.log'),
+        filename=os.path.join(run_uuid + '_' + tool_name + '.log'),
         level=args.level,
         filemode='w',
         format='%(asctime)s %(levelname)s %(message)s',
