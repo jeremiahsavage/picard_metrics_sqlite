@@ -80,7 +80,7 @@ def picard_SequencingArtifactMetrics_PreAdapterSummaryMetrics_to_df(stats_path, 
     return df
 
 
-def run(bam, engine, fasta, input_state, logger, uuid, vcf,
+def run(bam, engine, fasta, input_state, logger, run_uuid, vcf,
         alignment_summary_metrics, bait_bias_detail_metrics,
         bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
         gc_bias_detail_metrics, gc_bias_summary_metrics,
@@ -183,7 +183,7 @@ def run(bam, engine, fasta, input_state, logger, uuid, vcf,
             
     for i, df in enumerate(df_list):
         logger.info('df_list enumerate i=%s:' % i)
-        df['uuid'] = uuid
+        df['run_uuid'] = run_uuid
         df['bam'] = bam
         df['input_state'] = input_state
         df['fasta'] = fasta

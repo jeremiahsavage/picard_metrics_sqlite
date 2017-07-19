@@ -18,7 +18,7 @@ def run(run_uuid, metric_path, bam, fasta, ref_flat, ribosomal_intervals, input_
     df['bam'] = bam
     df['fasta'] = fasta
     df['input_state'] = input_state
-    df['run_uuid'] = uuid
+    df['run_uuid'] = run_uuid
     df['ref_flat'] = ref_flat
     df['ribosomal_intervals'] = ribosomal_intervals
     df.to_sql(table_name, engine, if_exists='append')
@@ -28,7 +28,7 @@ def run(run_uuid, metric_path, bam, fasta, ref_flat, ribosomal_intervals, input_
     df['bam'] = bam
     df['fasta'] = fasta
     df['input_state'] = input_state
-    df['run_uuid'] = uuid
+    df['run_uuid'] = run_uuid
     df['ref_flat'] = ref_flat
     df['ribosomal_intervals'] = ribosomal_intervals
     df.to_sql(table_name, engine, if_exists='append')    

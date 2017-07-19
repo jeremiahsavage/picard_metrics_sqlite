@@ -4,7 +4,7 @@ def picard_CalculateHsMetrics_to_df(stats_path, logger):
     return df
 
 
-def do_picard_metrics(uuid, stats_path, input_state, bam, fasta, engine, logger, metrics_type, wxs_dict = None, vcf = None):
+def do_picard_metrics(run_uuid, stats_path, input_state, bam, fasta, engine, logger, metrics_type, wxs_dict = None, vcf = None):
     if metrics_type == 'CollectJumpingLibraryMetrics':
         pass
     elif metrics_type == 'CollectVariantCallingMetrics':
@@ -27,7 +27,7 @@ def do_picard_metrics(uuid, stats_path, input_state, bam, fasta, engine, logger,
         logger.debug('Unknown metrics_type: %s' % metrics_type)
     for i, df in enumerate(df_list):
         logger.info('df_list enumerate i=%s:' % i)
-        df['uuid'] = uuid
+        df['run_uuid'] = run_uuid
         df['bam'] = bam
         df['input_state'] = input_state
         df['fasta'] = fasta
