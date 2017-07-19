@@ -139,23 +139,16 @@ def main():
 
     if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
-        if vars(args)['fasta'] == None:
-            fasta = None
-        else:
-            fasta = vars(args)['fasta']
-        picard_collectalignmentsummarymetrics.run(run_uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
+        picard_collectalignmentsummarymetrics.run(run_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':
         bam = get_param(args, 'bam')
         bam_library = get_param(args, 'bam_library')
         input_state = get_param(args, 'input_state')
         exome_kit = get_param(args, 'exome_kit')
-        fasta = get_param(args, 'fasta')
-        picard_collecthsmetrics.run(run_uuid, metric_path, bam, bam_library, exome_kit, fasta, input_state, engine, logger, metric_name)
+        picard_collecthsmetrics.run(run_uuid, metric_path, bam, bam_library, exome_kit, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
-        fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
-        vcf = get_param(args, 'vcf')
         alignment_summary_metrics = get_param(args, 'alignment_summary_metrics')
         bait_bias_detail_metrics = get_param(args, 'bait_bias_detail_metrics')
         bait_bias_summary_metrics = get_param(args, 'bait_bias_summary_metrics')
@@ -168,32 +161,26 @@ def main():
         quality_by_cycle_metrics = get_param(args, 'quality_by_cycle_metrics')
         quality_distribution_metrics = get_param(args, 'quality_distribution_metrics')
         quality_yield_metrics = get_param(args, 'quality_yield_metrics')
-        picard_collectmultiplemetrics.run(bam, engine, fasta, input_state, logger, run_uuid, vcf,
+        picard_collectmultiplemetrics.run(engine, bam, input_state, logger, run_uuid,
                                           alignment_summary_metrics, bait_bias_detail_metrics,
                                           bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
                                           gc_bias_detail_metrics, gc_bias_summary_metrics,
                                           insert_size_metrics, pre_adapter_detail_metrics,
                                           pre_adapter_summary_metrics, quality_by_cycle_metrics,
-                                          quality_distribution_metrics, quality_yield_metrics                                          
+                                          quality_distribution_metrics, quality_yield_metrics
         )
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
-        fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
-        vcf = get_param(args, 'vcf')
-        picard_collectoxogmetrics.run(run_uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
+        picard_collectoxogmetrics.run(run_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectRnaSeqMetrics':
         bam = get_param(args, 'bam')
-        fasta = get_param(args, 'fasta')
-        ref_flat = get_param(args, 'ref_flat')
-        ribosomal_intervals = get_param(args, 'ribosomal_intervals')
         input_state = get_param(args, 'input_state')
-        picard_collectrnaseqmetrics.run(run_uuid, metric_path, bam, fasta, ref_flat, ribosomal_intervals, input_state, engine, logger, metric_name)
+        picard_collectrnaseqmetrics.run(run_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
-        fasta = get_param(args, 'fasta')
         input_state = get_param(args, 'input_state')
-        picard_collectwgsmetrics.run(run_uuid, metric_path, bam, fasta, input_state, engine, logger, metric_name)
+        picard_collectwgsmetrics.run(run_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
