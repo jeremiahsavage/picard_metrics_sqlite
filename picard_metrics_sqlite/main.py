@@ -184,6 +184,9 @@ def main():
         picard_collectoxogmetrics.run(run_uuid, metric_path, bam, fasta, vcf, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectRnaSeqMetrics':
         bam = get_param(args, 'bam')
+        fasta = get_param(args, 'fasta')
+        ref_flat = get_param(args, 'ref_flat')
+        ribosomal_intervals = get_param(args, 'ribosomal_intervals')
         input_state = get_param(args, 'input_state')
         picard_collectrnaseqmetrics.run(run_uuid, metric_path, bam, fasta, ref_flat, ribosomal_intervals, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
