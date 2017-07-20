@@ -2,7 +2,7 @@ FROM ubuntu:xenial-20161010
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
-env VERSION 0.37
+env VERSION 0.38
 
 RUN apt-get update \
     && apt-get install -y \
