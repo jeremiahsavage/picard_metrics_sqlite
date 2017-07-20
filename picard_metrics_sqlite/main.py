@@ -161,7 +161,7 @@ def main():
         quality_by_cycle_metrics = get_param(args, 'quality_by_cycle_metrics')
         quality_distribution_metrics = get_param(args, 'quality_distribution_metrics')
         quality_yield_metrics = get_param(args, 'quality_yield_metrics')
-        picard_collectmultiplemetrics.run(engine, bam, input_state, logger, run_uuid,
+        picard_collectmultiplemetrics.run(bam, engine, input_state, logger, run_uuid,
                                           alignment_summary_metrics, bait_bias_detail_metrics,
                                           bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
                                           gc_bias_detail_metrics, gc_bias_summary_metrics,
