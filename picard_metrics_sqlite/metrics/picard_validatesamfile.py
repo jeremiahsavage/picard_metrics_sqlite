@@ -87,7 +87,7 @@ def run(task_uuid, stats_path, bam, input_state, engine, logger):
         store_dict = dict()
         store_dict['value'] = akey
         store_dict['count'] = val_error_dict[validation_type][akey]
-        store_dict['task_uuid'] = [rn_uuid]  # a non scalar
+        store_dict['task_uuid'] = [task_uuid]  # a non scalar
         store_dict['bam'] = bam
         store_dict['severity'] = validation_type
         store_dict['input_state'] = input_state
