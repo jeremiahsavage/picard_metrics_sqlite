@@ -23,9 +23,9 @@ def get_data_dict(stats_path, logger):
                     data_dict[value_key] = data_list[value_pos]
     return data_dict
 
-def run(run_uuid, stats_path, bam, input_state, engine, logger, metric_name):
+def run(task_uuid, stats_path, bam, input_state, engine, logger, metric_name):
     data_dict = get_data_dict(stats_path, logger)
-    data_dict['run_uuid'] = [run_uuid]
+    data_dict['task_uuid'] = [task_uuid]
     data_dict['bam'] = bam
     data_dict['input_state'] = input_state
     df = pd.DataFrame(data_dict)
