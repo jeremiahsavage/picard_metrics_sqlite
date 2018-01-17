@@ -23,9 +23,9 @@ def get_param(args, param_name):
         return vars(args)[param_name]
     return
 
-def setup_logging(tool_name, args, task_uuid):
+def setup_logging(tool_name, args, job_uuid):
     logging.basicConfig(
-        filename=os.path.join(task_uuid + '_' + tool_name + '.log'),
+        filename=os.path.join(job_uuid + '_' + tool_name + '.log'),
         level=args.level,
         filemode='w',
         format='%(asctime)s %(levelname)s %(message)s',
@@ -58,7 +58,7 @@ def main():
     parser.add_argument('--metric_path',
                         required = False
     )
-    parser.add_argument('--task_uuid',
+    parser.add_argument('--job_uuid',
                         required = True,
                         help = 'uuid string',
     )
@@ -129,23 +129,23 @@ def main():
     input_state = args.input_state
     metric_name = args.metric_name
     metric_path = args.metric_path
-    task_uuid = args.task_uuid
+    job_uuid = args.job_uuid
 
-    logger = setup_logging('picard_' + metric_name, args, task_uuid)
+    logger = setup_logging('picard_' + metric_name, args, job_uuid)
 
-    sqlite_name = task_uuid + '.db'
+    sqlite_name = job_uuid + '.db'
     engine_path = 'sqlite:///' + sqlite_name
     engine = sqlalchemy.create_engine(engine_path, isolation_level='SERIALIZABLE')
 
     if metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
-        picard_collectalignmentsummarymetrics.run(task_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_collectalignmentsummarymetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':
         bam = get_param(args, 'bam')
         bam_library = get_param(args, 'bam_library')
         input_state = get_param(args, 'input_state')
         exome_kit = get_param(args, 'exome_kit')
-        picard_collecthsmetrics.run(task_uuid, metric_path, bam, bam_library, exome_kit, input_state, engine, logger, metric_name)
+        picard_collecthsmetrics.run(job_uuid, metric_path, bam, bam_library, exome_kit, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
@@ -161,7 +161,7 @@ def main():
         quality_by_cycle_metrics = get_param(args, 'quality_by_cycle_metrics')
         quality_distribution_metrics = get_param(args, 'quality_distribution_metrics')
         quality_yield_metrics = get_param(args, 'quality_yield_metrics')
-        picard_collectmultiplemetrics.run(bam, engine, input_state, logger, task_uuid,
+        picard_collectmultiplemetrics.run(bam, engine, input_state, logger, job_uuid,
                                           alignment_summary_metrics, bait_bias_detail_metrics,
                                           bait_bias_summary_metrics, base_distribution_by_cycle_metrics,
                                           gc_bias_detail_metrics, gc_bias_summary_metrics,
@@ -172,31 +172,31 @@ def main():
     elif metric_name == 'CollectOxoGMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_collectoxogmetrics.run(task_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_collectoxogmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectRnaSeqMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_collectrnaseqmetrics.run(task_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_collectrnaseqmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_collectwgsmetrics.run(task_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_collectwgsmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'MarkDuplicates':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_markduplicates.run(task_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+        picard_markduplicates.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     # elif metric_name == 'MarkDuplicatesWithMateCigar':
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
-    #     picard_markduplicateswithmatecigar.run(task_uuid, bam, input_state, engine, logger)
+    #     picard_markduplicateswithmatecigar.run(job_uuid, bam, input_state, engine, logger)
     # elif metric_name == 'FixMateInformation':
     #     bam = get_param(args, 'bam')
     #     input_state = get_param(args, 'input_state')
-    #     picard_fixmateinformation.run(task_uuid, bam, input_state, engine, logger)
+    #     picard_fixmateinformation.run(job_uuid, bam, input_state, engine, logger)
     elif metric_name == 'ValidateSamFile':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
-        picard_validatesamfile.run(task_uuid, metric_path, bam, input_state, engine, logger)
+        picard_validatesamfile.run(job_uuid, metric_path, bam, input_state, engine, logger)
     else:
         sys.exit('No recognized tool was selected')
         
