@@ -2,7 +2,7 @@ FROM ubuntu:artful-20171019
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
-env VERSION 0.41
+env VERSION 0.42
 
 RUN apt-get update \
     && apt-get install -y \
