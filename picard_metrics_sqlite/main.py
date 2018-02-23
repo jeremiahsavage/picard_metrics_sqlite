@@ -142,10 +142,8 @@ def main():
         picard_collectalignmentsummarymetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':
         bam = get_param(args, 'bam')
-        bam_library = get_param(args, 'bam_library')
         input_state = get_param(args, 'input_state')
-        exome_kit = get_param(args, 'exome_kit')
-        picard_collecthsmetrics.run(job_uuid, metric_path, bam, bam_library, exome_kit, input_state, engine, logger, metric_name)
+        picard_collecthsmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectMultipleMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
