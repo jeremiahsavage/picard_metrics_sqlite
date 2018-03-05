@@ -67,12 +67,6 @@ def main():
     parser.add_argument('--bam',
                         required = False
     )
-    parser.add_argument('--bam_library',
-                        required = False
-    )
-    parser.add_argument('--exome_kit',
-                        required = False
-    )
     parser.add_argument('--fasta',
                         required = False
     )

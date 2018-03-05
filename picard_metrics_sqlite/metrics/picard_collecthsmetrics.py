@@ -8,7 +8,7 @@ def picard_CollectHsMetrics_to_df(metric_path, logger):
     return df
 
 def picard_CollectHsMetrics_histogram_to_df(metric_path, logger):
-    select = 'coverage'
+    select = 'coverage_or_base_quality'
     df = picard_select_tsv_to_df(metric_path, select, logger)
     return df
 

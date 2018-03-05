@@ -25,7 +25,18 @@ def all_tsv_to_df(tsv_path, logger):
     logger.info('df=\n%s' % df)
     return df
 
-
+def uniquify_column_names(column_list):
+    new_header = []
+    name_count_dict = dict()
+    for column in column_list:
+        if column in name_count_dict:
+            name_count_dict[column] += 1
+            new_header.append(column+'.'+str(name_count_dict[column]))
+        else:
+            name_count_dict[column] = 0
+            new_header.append(column)
+    return new_header
+            
 def picard_select_tsv_to_df(stats_path, select, logger):
     read_header = False
     data_dict = dict()
@@ -45,6 +56,7 @@ def picard_select_tsv_to_df(stats_path, select, logger):
             if not read_header and len(line_split) > 1:
                 if select == line_split[0]:
                     header = line_split
+                    header = uniquify_column_names(header)
                     read_header = True
             elif read_header and len(line_split) == 1:
                 df_index = list(range(len(data_dict)))
