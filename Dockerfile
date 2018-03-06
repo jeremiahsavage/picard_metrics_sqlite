@@ -2,7 +2,7 @@ FROM ubuntu:artful-20171019
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
-env VERSION 0.43
+env VERSION 0.44
 
 RUN apt-get update \
     && apt-get install -y \
