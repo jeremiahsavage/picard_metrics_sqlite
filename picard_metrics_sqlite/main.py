@@ -12,6 +12,7 @@ from .metrics import picard_collecthsmetrics
 from .metrics import picard_collectmultiplemetrics
 from .metrics import picard_collectoxogmetrics
 from .metrics import picard_collectrnaseqmetrics
+from .metrics import picard_collecttargetedpcrmetrics
 from .metrics import picard_collectwgsmetrics
 from .metrics import picard_markduplicates
 from .metrics import picard_validatesamfile
@@ -169,6 +170,10 @@ def main():
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
         picard_collectrnaseqmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+    elif metric_name == 'CollectTargetedPcrMetrics':
+        bam = get_param(args, 'bam')
+        input_state = get_param(args, 'input_state')
+        picard_collecttargetedpcrmetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectWgsMetrics':
         bam = get_param(args, 'bam')
         input_state = get_param(args, 'input_state')
