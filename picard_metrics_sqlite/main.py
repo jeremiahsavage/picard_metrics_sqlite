@@ -7,6 +7,7 @@ import sys
 
 import sqlalchemy
 
+from .metrics import gatk_calculatecontamination
 from .metrics import picard_collectalignmentsummarymetrics
 from .metrics import picard_collecthsmetrics
 from .metrics import picard_collectmultiplemetrics
@@ -37,7 +38,7 @@ def setup_logging(tool_name, args, job_uuid):
     return logger
 
 def main():
-    parser = argparse.ArgumentParser('picard docker tool')
+    parser = argparse.ArgumentParser('picard/gatk metrics to sqlite tool')
 
     # Logging flags.
     parser.add_argument('-d', '--debug',
@@ -132,7 +133,10 @@ def main():
     engine_path = 'sqlite:///' + sqlite_name
     engine = sqlalchemy.create_engine(engine_path, isolation_level='SERIALIZABLE')
 
-    if metric_name == 'CollectAlignmentSummaryMetrics':
+    if metric_name == 'gatk_CalculateContamination':
+        bam = get_param(args, 'bam')
+        gatk_calculatecontamination.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
+    elif metric_name == 'CollectAlignmentSummaryMetrics':
         bam = get_param(args, 'bam')
         picard_collectalignmentsummarymetrics.run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name)
     elif metric_name == 'CollectHsMetrics':

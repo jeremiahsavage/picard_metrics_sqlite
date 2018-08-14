@@ -70,7 +70,7 @@ def picard_select_tsv_to_df(stats_path, select, logger):
             elif not read_header and len(line_split) == 1:
                 continue
             else:
-                logger.info('strange line: %s' % line)
+                logger.debug('strange line: %s' % line)
                 sys.exit(1)
     if not read_header:
         logger.info('bam file was probably too small to generate stats as header not read: %s' % stats_path)
@@ -78,3 +78,38 @@ def picard_select_tsv_to_df(stats_path, select, logger):
     logger.debug('no data saved to df')
     sys.exit(1)
     return None
+
+def gatk_select_tsv_to_df(stats_path, select, logger):
+    read_header = False
+    data_dict = dict()
+    if stats_path is None:
+        return None
+    if not os.path.exists(stats_path):
+        logger.info('the stats file %s do not exist, so return None' % stats_path)
+        return None
+    logger.info('stats_path=%s' % stats_path)
+    with open(stats_path, 'r') as stats_open:
+        i = 0
+        for line in stats_open:
+            line = line.strip('\n')
+            line_split = line.split('\t')
+            if not read_header and len(line_split) > 1:
+                if select == line_split[0]:
+                    header = line_split
+                    header = uniquify_column_names(header)
+                    read_header = True
+            elif read_header and len(line_split) == 1:
+                logger.info('here')
+            elif read_header and len(line_split) > 0:
+                if len(line_split) == len(header):
+                    data_dict[i] = line_split
+                    i += 1
+            elif not read_header and len(line_split) == 1:
+                continue
+            else:
+                logger.debug('strange line: %s' % line)
+                sys.exit(1)
+    df_index = list(range(len(data_dict)))
+    df = pd.DataFrame.from_dict(data_dict, orient='index')
+    df.columns = header
+    return df
