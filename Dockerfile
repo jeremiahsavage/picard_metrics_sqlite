@@ -2,7 +2,7 @@ FROM ubuntu:bionic-20180426
 
 MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
 
-env VERSION 0.47
+env VERSION 0.48
 
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
