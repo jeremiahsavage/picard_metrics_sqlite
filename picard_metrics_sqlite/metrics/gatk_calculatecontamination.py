@@ -3,7 +3,7 @@ import os
 from .metrics_util import gatk_select_tsv_to_df
 
 def gatk_CalculateContamination_to_df(metric_path, logger):
-    select = 'level'
+    select = 'sample'
     df = gatk_select_tsv_to_df(metric_path, select, logger)
     return df
 
