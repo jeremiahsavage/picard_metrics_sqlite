@@ -1,7 +1,5 @@
 FROM ubuntu:bionic-20180426
 
-MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
-
 env VERSION 0.51
 
 RUN apt-get update \
@@ -10,7 +8,8 @@ RUN apt-get update \
        python3-pandas \
        python3-pip \
        python3-sqlalchemy \
-       wget \
     && apt-get clean \
-    && pip3 install picard_metrics_sqlite \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY picard_metrics_sqlite setup.cfg setup.py /opt/
+RUN cd /opt/ && python3 setup.py install
