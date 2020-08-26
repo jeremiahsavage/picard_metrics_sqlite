@@ -7,16 +7,16 @@ import sys
 
 import sqlalchemy
 
-from .metrics import gatk_calculatecontamination
-from .metrics import picard_collectalignmentsummarymetrics
-from .metrics import picard_collecthsmetrics
-from .metrics import picard_collectmultiplemetrics
-from .metrics import picard_collectoxogmetrics
-from .metrics import picard_collectrnaseqmetrics
-from .metrics import picard_collecttargetedpcrmetrics
-from .metrics import picard_collectwgsmetrics
-from .metrics import picard_markduplicates
-from .metrics import picard_validatesamfile
+from metrics import gatk_calculatecontamination
+from metrics import picard_collectalignmentsummarymetrics
+from metrics import picard_collecthsmetrics
+from metrics import picard_collectmultiplemetrics
+from metrics import picard_collectoxogmetrics
+from metrics import picard_collectrnaseqmetrics
+from metrics import picard_collecttargetedpcrmetrics
+from metrics import picard_collectwgsmetrics
+from metrics import picard_markduplicates
+from metrics import picard_validatesamfile
 
 def get_param(args, param_name):
     if vars(args)[param_name] == None:
@@ -119,7 +119,7 @@ def main():
     parser.add_argument('--quality_yield_metrics',
                         required = False
     )
-    
+
     # setup required parameters
     args = parser.parse_args()
     input_state = args.input_state
@@ -200,7 +200,7 @@ def main():
         picard_validatesamfile.run(job_uuid, metric_path, bam, input_state, engine, logger)
     else:
         sys.exit('No recognized tool was selected')
-        
+
     return
 
 if __name__ == '__main__':
