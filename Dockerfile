@@ -1,16 +1,22 @@
-FROM ubuntu:bionic-20180426
+# FROM ubuntu:bionic-20180426
+FROM quay.io/ncigdc/python38-builder as builder
 
-MAINTAINER Jeremiah H. Savage <jeremiahsavage@gmail.com>
+COPY ./ /opt
 
-env VERSION 0.51
+WORKDIR /opt
 
-RUN apt-get update \
-    && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y \
-       python3-pandas \
-       python3-pip \
-       python3-sqlalchemy \
-       wget \
-    && apt-get clean \
-    && pip3 install picard_metrics_sqlite \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN pip install tox && tox -p
+
+FROM quay.io/ncigdc/python38
+
+COPY --from=builder /opt/dist/*.tar.gz /opt
+COPY requirements.txt /opt
+
+WORKDIR /opt
+
+RUN pip install -r requirements.txt *.tar.gz \
+	&& rm -f *.tar.gz requirements.txt
+
+ENTRYPOINT ["picard_metrics_sqlite"]
+
+CMD ["--help"]

@@ -1,11 +1,11 @@
-import os
-
 from .metrics_util import gatk_select_tsv_to_df
 
+
 def gatk_CalculateContamination_to_df(metric_path, logger):
-    select = 'level'
+    select = ['level', 'sample']
     df = gatk_select_tsv_to_df(metric_path, select, logger)
     return df
+
 
 def run(job_uuid, metric_path, bam, input_state, engine, logger, metric_name):
     table_name = metric_name
