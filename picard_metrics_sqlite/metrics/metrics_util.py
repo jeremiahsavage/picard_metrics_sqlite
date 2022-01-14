@@ -4,6 +4,7 @@ import sys
 
 import pandas as pd
 
+
 def get_key_interval_dicts_from_json(key_intervalname_json_path, logger):
     with open(key_intervalname_json_path, 'r') as json_path_open:
         json_data = json.load(json_path_open)
@@ -25,17 +26,19 @@ def all_tsv_to_df(tsv_path, logger):
     logger.info('df=\n%s' % df)
     return df
 
+
 def uniquify_column_names(column_list):
     new_header = []
     name_count_dict = dict()
     for column in column_list:
         if column in name_count_dict:
             name_count_dict[column] += 1
-            new_header.append(column+'.'+str(name_count_dict[column]))
+            new_header.append(column + '.' + str(name_count_dict[column]))
         else:
             name_count_dict[column] = 0
             new_header.append(column)
     return new_header
+
 
 def picard_select_tsv_to_df(stats_path, select, logger):
     read_header = False
@@ -73,11 +76,15 @@ def picard_select_tsv_to_df(stats_path, select, logger):
                 logger.debug('strange line: %s' % line)
                 sys.exit(1)
     if not read_header:
-        logger.info('bam file was probably too small to generate stats as header not read: %s' % stats_path)
+        logger.info(
+            'bam file was probably too small to generate stats as header not read: %s'
+            % stats_path
+        )
         return None
     logger.debug('no data saved to df')
     sys.exit(1)
     return None
+
 
 def gatk_select_tsv_to_df(stats_path, select, logger):
     # much of this should just be replaced with df = pd.read_table(stats_path)
